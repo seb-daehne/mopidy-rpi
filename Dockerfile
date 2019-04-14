@@ -11,8 +11,7 @@ RUN apk update && apk upgrade && \
             --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
             gstreamer \
             mopidy=2.1.0-r1 \
-            py-pip=9.0.1-r1 \
-            python-dev alpine-sdk \
+            alpine-sdk \
             python3 \
             py3-yaml
 RUN pip3 install Mopidy-GMusic Mopidy-Youtube youtube-dl pyasn1
