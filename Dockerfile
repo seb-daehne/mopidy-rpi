@@ -1,22 +1,17 @@
-FROM arm32v6/alpine:3.9.3
+FROM arm32v7/ubuntu:xenial
 LABEL maintainer "Sebastian Daehne <daehne@rshc.de>"
 
 ADD qemu-arm-static /usr/bin
-RUN adduser -S mopidy
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache  \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-            --repository  http://dl-cdn.alpinelinux.org/alpine/edge/community \
-            --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-            gstreamer \
-            mopidy=2.1.0-r1 \
-            alpine-sdk \
-            python3 \
-            py3-yaml
-RUN pip3 install Mopidy-GMusic Mopidy-Youtube youtube-dl pyasn1
+RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y wget
 
-COPY mopidy.conf /home/mopidy/.config/mopidy/mopidy.conf
+RUN wget -q -O - https://apt.mopidy.com/mopidy.gpg | apt-key add -
+RUN wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/stretch.list
+
+RUN apt-get update  && apt-get -y install mopidy mopidy-spotify    
+#RUN pip3 install Mopidy-GMusic Mopidy-Youtube youtube-dl pyasn1
+
+#COPY mopidy.conf /home/mopidy/.config/mopidy/mopidy.conf
 
 USER mopidy
 ENTRYPOINT ["/usr/bin/mopidy"]
